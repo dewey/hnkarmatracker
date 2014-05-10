@@ -4,7 +4,10 @@ block content
     div.row
         div.col-md-12
             if exists == "no"
-                p.lead I'm not tracking this account name yet. Enter your HN username and the system will start tracking your account.
+                p.lead
+                    span.color-error
+                        | I'm not tracking this account name yet. 
+                    | Enter your HN username and the system will start tracking your account.
             else
                 p.lead Enter your HN username and the system will start tracking your account.
             
