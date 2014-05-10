@@ -1,5 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    p.lead
+        | This site will track your account stats and draw pretty graphs once you  
+        a(href="/user/signup") signed up
+        | .
+
+    div.row
+        form(action="/user/show", method="post", role="form")
+            div.col-md-3
+                input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername")
+            div.col-md-3
+                button(class="btn btn-block btn-lg btn-primary", type="submit") Show account
