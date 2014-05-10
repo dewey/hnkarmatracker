@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  form(action="/user/add", method="post", role="form")
+    div.form-group
+      label(for="inputUsername") Last.fm Nick
+      input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername")
+
+    button#btnSubmit(type="submit") Sign me up
