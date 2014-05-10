@@ -1,5 +1,7 @@
 /**
- * This is a Hacker News Karma tracker because http://hn-karma-tracker.herokuapp.com/ isn't working for me. (Invalid Username)
+ * This is a Hacker News karma tracker. It's using Redis to store all the collected values. It's using
+ * a cronjob to gather new stats every 24hours.
+ * @author dewey [https://github.com/dewey]
  */
 
 var express = require('express'),
