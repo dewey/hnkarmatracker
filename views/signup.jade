@@ -1,12 +1,17 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    div.row
+        div.col-md-12
+            if exists == "no"
+                p.lead I'm not tracking this account name yet. Enter your HN username and the system will start tracking your account.
+            else
+                p.lead Enter your HN username and the system will start tracking your account.
+            
 
-  form(action="/user/add", method="post", role="form")
-    div.form-group
-      label(for="inputUsername") Last.fm Nick
-      input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername")
-
-    button#btnSubmit(type="submit") Sign me up
+    div.row
+        form(action="/user/add", method="post", role="form")
+            div.col-md-3
+                input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername")
+            div.col-md-3
+                button(class="btn btn-block btn-lg btn-primary", type="submit") Track my account
