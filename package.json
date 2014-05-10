@@ -11,6 +11,7 @@
     "redis": "*",
     "request-json": "*",
     "time": "*",
-    "cron": "*"
+    "cron": "*",
+    "validator": "*"
   }
 }

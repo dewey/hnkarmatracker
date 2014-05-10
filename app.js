@@ -10,6 +10,7 @@ var express = require('express'),
     hn = request.newClient('https://hn.algolia.com/api/v1/'),
     moment = require('moment'),
     cron = require('cron').CronJob,
+    validator = require('validator'),
     path = require('path');
 
 var app = express();
@@ -34,12 +35,15 @@ if ('development' == app.get('env')) {
     app.locals.pretty = true;
 }
 
+// Render the index page
 app.get('/', function(req, res) {
     res.render('index', {
         title: "HN Karma Tracker"
     });
 });
 
+// Render the signup page. The exists parameter is used to determine if we should
+// display the error message (User already in the system) or not.
 app.get('/user/signup', function(req, res) {
     res.render('signup', {
         title: "HN Karma Tracker",
@@ -47,12 +51,14 @@ app.get('/user/signup', function(req, res) {
     });
 });
 
+// Check if a user is in the database and show the profile if that's the case.
+// Redirect to signup page if there's no account match.
 app.post('/user/show', function(req, res) {
     var hnusername = req.body.hnusername;
 
     if (hnusername.length > 1 && hnusername.length < 50) {
         client.sismember(redisPrefix + "-users", hnusername, function(err, reply) {
-            
+
             // If user is already in the system
             if (reply == 1) {
                 // Overwrite URL
@@ -71,12 +77,13 @@ app.post('/user/show', function(req, res) {
     }
 });
 
+// The form action for the signup form. Make sure it's a legal username and if that's the case
+// add it to the database.
 app.post('/user/add', function(req, res) {
-    // TODO: Sanitize input
     var hnusername = req.body.hnusername;
     var timestamp = moment().unix();
 
-    if (hnusername.length > 1 && hnusername.length < 50) {
+    if (validator.isAlphanumeric(hnusername) && hnusername.length > 1 && hnusername.length < 50) {
 
         // Check if user is already in the database
         client.exists(redisPrefix + "-" + hnusername, function(err, reply) {
@@ -115,10 +122,13 @@ app.post('/user/add', function(req, res) {
     }
 });
 
-
+// Debug function to manually refresh the stats. Would mess up the values provided by the
+// daily cronjob.
 app.get('/user/:username/refresh', function(req, res) {
     var hnusername = req.params.username;
-    updateUser(hnusername);
+
+    // Uncomment for debug purposes only
+    // updateUser(hnusername);
 
     // Overwrite URL
     res.location('/user/' + hnusername);
@@ -127,6 +137,7 @@ app.get('/user/:username/refresh', function(req, res) {
     res.redirect('/user/' + hnusername);
 });
 
+// This route is rendering the user profile
 app.get('/user/:username', function(req, res) {
     var hnusername = req.params.username;
 
@@ -250,6 +261,7 @@ client.on("error", function(err) {
     console.log("[Redis] Error " + err);
 });
 
+// Start the app
 http.createServer(app).listen(app.get('port'), function() {
     console.log('HN Karma Tracker is listening on port ' + app.get('port'));
 });
