@@ -21,7 +21,7 @@ var app = express();
 var redisPrefix = "hntracker"
 
 // Setting up Express
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3008);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());

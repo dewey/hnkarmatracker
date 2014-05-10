@@ -12,6 +12,7 @@
     "request-json": "*",
     "time": "*",
     "cron": "*",
-    "validator": "*"
+    "validator": "*",
+    "moment": "*"
   }
 }
