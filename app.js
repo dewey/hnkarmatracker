@@ -42,8 +42,33 @@ app.get('/', function(req, res) {
 
 app.get('/user/signup', function(req, res) {
     res.render('signup', {
-        title: "HN Karma Tracker"
+        title: "HN Karma Tracker",
+        exists: req.query.exists
     });
+});
+
+app.post('/user/show', function(req, res) {
+    var hnusername = req.body.hnusername;
+
+    if (hnusername.length > 1 && hnusername.length < 50) {
+        client.sismember(redisPrefix + "-users", hnusername, function(err, reply) {
+            
+            // If user is already in the system
+            if (reply == 1) {
+                // Overwrite URL
+                res.location('/user/' + hnusername);
+
+                // And forward to success page
+                res.redirect('/user/' + hnusername);
+            } else {
+                // Overwrite URL
+                res.location('/user/signup');
+
+                // And forward to success page
+                res.redirect('/user/signup?exists=no');
+            }
+        });
+    }
 });
 
 app.post('/user/add', function(req, res) {
@@ -70,6 +95,7 @@ app.post('/user/add', function(req, res) {
                 } else {
                     console.log("[HN Tracker] Adding new user")
                     client.hmset(redisPrefix + "-" + hnusername, "created", timestamp);
+                    client.sadd(redisPrefix + "-users", hnusername);
 
                     // Fetching new stats
                     updateUser(hnusername)
@@ -207,9 +233,17 @@ function updateUser(hnusername) {
 }
 
 // Update all values every day at midnight
-new CronJob('0 0 0 * * *', function() {
+// new cron('0 0 0 * * *', function() {
+//     client.smembers(redisPrefix + "-users", function(err, users) {
+//         for (var i = users.length - 1; i >= 0; i--) {
+//             updateUser(users[i]);
+//             console.log("Updated stats for user -> " + users[i]);
+//         };
+//     })
+// }, null, true, "America/San_Francisco");
 
-}, null, true, "America/San_Francisco");
+
+
 
 // Catch Redis error messages
 client.on("error", function(err) {
@@ -217,5 +251,5 @@ client.on("error", function(err) {
 });
 
 http.createServer(app).listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + app.get('port'));
+    console.log('HN Karma Tracker is listening on port ' + app.get('port'));
 });
