@@ -1,0 +1,15 @@
+.color-submissions {
+    color: rgba(247, 70, 74, 1.0000);
+}
+
+.color-comments {
+    color: rgba(62, 191, 190, 1.0000);
+}
+
+.color-karma {
+    color: rgba(253, 181, 83, 1.0000);
+}
+
+footer {
+    margin-top: 30px;
+}
