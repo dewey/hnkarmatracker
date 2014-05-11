@@ -25,16 +25,17 @@ app.set('port', process.env.PORT || 3008);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
-app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
     app.locals.pretty = true;
+    // app.use(express.logger('dev'));
 }
 
 // Render the index page
@@ -254,10 +255,15 @@ function updateUser(hnusername) {
 // Update all values every day at midnight
 new cron('0 0 0 * * *', function() {
     client.smembers(redisPrefix + "-users", function(err, users) {
-        for (var i = users.length - 1; i >= 0; i--) {
-            updateUser(users[i]);
-            console.log("Updated stats for user -> " + users[i]);
-        };
+        if (!err) {
+            for (var i = users.length - 1; i >= 0; i--) {
+                updateUser(users[i]);
+                console.log("Updated stats for user -> " + users[i]);
+            };
+        } else {
+            console.log("[Redis] Error listing all users.")
+        }
+
     })
 }, null, true, "America/Los_Angeles");
 
