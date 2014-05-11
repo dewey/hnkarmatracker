@@ -202,7 +202,7 @@ app.get('/user/:username', function(req, res) {
                                 labelsComment: dataLabelsCommentQuery,
                                 dataComment: dataCommentQuery,
                                 labelsSubmission: dataLabelsSubmissionQuery,
-                                dataSubmission: dataLabelsSubmissionQuery
+                                dataSubmission: dataSubmissionQuery
                             }
                         });
                     })
