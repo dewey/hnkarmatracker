@@ -243,12 +243,15 @@ function updateKey(body, fieldname, hnusername) {
 // TODO: Use async.series
 function updateUser(hnusername) {
     hn.get("users/" + hnusername, function(err, res, body) {
-
-        // Update counts
-        updateKey(body, "karma", hnusername);
-        updateKey(body, "comment_count", hnusername);
-        updateKey(body, "submission_count", hnusername);
-        updateKey(body, "avg", hnusername);
+        if (!err) {
+            // Update counts
+            updateKey(body, "karma", hnusername);
+            updateKey(body, "comment_count", hnusername);
+            updateKey(body, "submission_count", hnusername);
+            updateKey(body, "avg", hnusername);
+        } else {
+            console.log("[Express] Error fetching new stats.")
+        }
     });
 }
 
