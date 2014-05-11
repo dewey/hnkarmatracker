@@ -76,6 +76,12 @@ app.post('/user/show', function(req, res) {
                 res.redirect('/user/signup?exists=no');
             }
         });
+    } else {
+        // Overwrite URL
+        res.location('/');
+
+        // And forward to success page
+        res.redirect('/');
     }
 });
 
@@ -233,7 +239,7 @@ function updateKey(body, fieldname, hnusername) {
 }
 
 // Update user stats
-// TODO: Make async.series
+// TODO: Use async.series
 function updateUser(hnusername) {
     hn.get("users/" + hnusername, function(err, res, body) {
 
@@ -246,17 +252,14 @@ function updateUser(hnusername) {
 }
 
 // Update all values every day at midnight
-// new cron('0 0 0 * * *', function() {
-//     client.smembers(redisPrefix + "-users", function(err, users) {
-//         for (var i = users.length - 1; i >= 0; i--) {
-//             updateUser(users[i]);
-//             console.log("Updated stats for user -> " + users[i]);
-//         };
-//     })
-// }, null, true, "America/San_Francisco");
-
-
-
+new cron('0 0 0 * * *', function() {
+    client.smembers(redisPrefix + "-users", function(err, users) {
+        for (var i = users.length - 1; i >= 0; i--) {
+            updateUser(users[i]);
+            console.log("Updated stats for user -> " + users[i]);
+        };
+    })
+}, null, true, "America/Los_Angeles");
 
 // Catch Redis error messages
 client.on("error", function(err) {
