@@ -10,18 +10,12 @@
 .color-error {
     color: rgba(247, 70, 74, 1.0000);
 }
-/* Wrapper for page content to push down footer */
-
 #wrap {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    /* Negative indent footer by it's height */
-
-margin: 0 auto -90px;
+    margin: 0 auto -90px;
 }
-/* Set the fixed height of the footer here */
-
 #push,
 #footer {
     height: 100px;
@@ -31,4 +25,45 @@ margin: 0 auto -90px;
 }
 body {
     height: 100%;
+}
+@font-face {
+    font-family: 'EntypoRegular';
+    src: url('font/entypo.eot');
+    src: url('font/entypo.eot?#iefix') format('embedded-opentype'), url('font/entypo.woff') format('woff'), url('font/entypo.ttf') format('truetype'), url('font/entypo.svg#EntypoRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+.entypo {
+    font-family: 'EntypoRegular';
+    font-weight: normal;
+    line-height: 0;
+    padding-right: 15px;
+}
+.entypo.clock:before {
+    content: '\1F554';
+    vertical-align: middle;
+    font-size: 70px;
+}
+.entypo.user:before {
+    content: '\1F464';
+    vertical-align: middle;
+    font-size: 70px;
+}
+.entypo.eye:before {
+    content: '\E70A';
+    vertical-align: middle;
+    font-size: 70px;
+}
+.row-space-top {
+    margin-top: 10%;
+    margin-bottom: 30px;
+}
+.step {
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+.entypo-label {
+    font-size: 28px;
+    line-height: 1.46428571;
+    font-weight: 300;
 }

@@ -4,7 +4,7 @@ block content
     p.lead
         | This site will track your 
         a(href="https://news.ycombinator.com/") Hackernews 
-        | account stats and draw pretty graphs once you  
+        | account stats and draws pretty graphs once you  
         a(href="/user/signup") signed up
         | . If you just want to know how it looks like check out my 
         a(href="/user/dewey") profile
@@ -16,3 +16,21 @@ block content
                 input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername")
             div.col-md-3
                 button(class="btn btn-block btn-lg btn-primary", type="submit") Show account
+
+    div.row.row-space-top
+        div.col-md-12
+            h4 How does it work?
+
+            div.step
+                span.entypo.user
+                span.entypo-label You 
+                    a(href="/user/signup") sign up 
+                    | and we start tracking your account.
+       
+            div.step
+                span.entypo.clock
+                span.entypo-label Now it's time to wait. We are fetching new stats every 24h.
+
+            div.step
+                span.entypo.eye
+                span.entypo-label After a few days your graphs will start to look interesting.         
