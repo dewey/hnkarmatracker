@@ -1,18 +1,31 @@
 {
-  "name": "hntracker",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
-  "dependencies": {
-    "express": "3.2.5",
-    "jade": "*",
-    "redis": "*",
-    "request-json": "*",
-    "time": "*",
-    "cron": "*",
-    "validator": "*",
-    "moment": "*"
-  }
+    "name": "hn-karma-tracker",
+    "version": "0.0.1",
+    "author": "dewey <mail@notmyhostna.me",
+    "description": "A simple app to gather and display Hackernews account stats.",
+    "private": true,
+    "scripts": {
+        "start": "node app.js"
+    },
+    "app": {
+        "title": "HN Karma Tracker",
+        "redis": {
+            "prefix": "hntracker"
+        }
+    },
+    "dependencies": {
+        "express": "3.2.5",
+        "jade": "*",
+        "redis": "*",
+        "request-json": "*",
+        "time": "*",
+        "cron": "*",
+        "validator": "*",
+        "moment": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dewey/hnkarmatracker"
+    },
+    "license": "MIT"
 }

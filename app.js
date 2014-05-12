@@ -1,5 +1,7 @@
 /**
- * This is a Hacker News karma tracker. It's using Redis to store all the collected values. It's using
+ * Hackernews Karma Tracker
+ * 
+ * This app is tracking the account stats of users who signed up using Redis to store all the collected values and
  * a cronjob to gather new stats every 24hours.
  * @author dewey [https://github.com/dewey]
  */
@@ -13,18 +15,16 @@ var express = require('express'),
     moment = require('moment'),
     cron = require('cron').CronJob,
     validator = require('validator'),
+    async = require('async'),
+    config = require('./package.json'),
     path = require('path');
 
 var app = express();
-
-// Prefix we are using to make it easier to identify redis keys related to this project.
-var redisPrefix = "hntracker"
 
 // Setting up Express
 app.set('port', process.env.PORT || 3008);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-app.use(express.favicon());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
@@ -35,13 +35,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
     app.locals.pretty = true;
-    // app.use(express.logger('dev'));
 }
 
 // Render the index page
 app.get('/', function(req, res) {
     res.render('index', {
-        title: "HN Karma Tracker"
+        title: config.title
     });
 });
 
@@ -49,7 +48,7 @@ app.get('/', function(req, res) {
 // display the error message (User already in the system) or not.
 app.get('/user/signup', function(req, res) {
     res.render('signup', {
-        title: "HN Karma Tracker",
+        title: config.title,
         exists: req.query.exists
     });
 });
@@ -60,7 +59,7 @@ app.post('/user/show', function(req, res) {
     var hnusername = req.body.hnusername;
 
     if (hnusername.length > 1 && hnusername.length < 50) {
-        client.sismember(redisPrefix + "-users", hnusername, function(err, reply) {
+        client.sismember(config.app.redis.prefix + "-users", hnusername, function(err, reply) {
 
             // If user is already in the system
             if (reply == 1) {
@@ -95,7 +94,7 @@ app.post('/user/add', function(req, res) {
     if (validator.isAlphanumeric(hnusername) && hnusername.length > 1 && hnusername.length < 50) {
 
         // Check if user is already in the database
-        client.exists(redisPrefix + "-" + hnusername, function(err, reply) {
+        client.exists(config.app.redis.prefix + "-" + hnusername, function(err, reply) {
             if (!err) {
                 if (reply == 1) {
                     console.log("[HN Tracker] User already exists. Redirecting to user page.")
@@ -110,8 +109,8 @@ app.post('/user/add', function(req, res) {
                     res.redirect('/user/' + hnusername);
                 } else {
                     console.log("[HN Tracker] Adding new user")
-                    client.hmset(redisPrefix + "-" + hnusername, "created", timestamp);
-                    client.sadd(redisPrefix + "-users", hnusername);
+                    client.hmset(config.app.redis.prefix + "-" + hnusername, "created", timestamp);
+                    client.sadd(config.app.redis.prefix + "-users", hnusername);
 
                     // Fetching new stats
                     updateUser(hnusername)
@@ -151,7 +150,7 @@ app.get('/user/:username', function(req, res) {
     var hnusername = req.params.username;
 
     // Get karma count
-    client.lrange(redisPrefix + ":" + hnusername + ":karma", 0, -1, function(err, data) {
+    client.lrange(config.app.redis.prefix + ":" + hnusername + ":karma", 0, -1, function(err, data) {
         if (!err) {
             var dataLabelsKarmaQuery = [];
             var dataKarmaQuery = [];
@@ -172,7 +171,7 @@ app.get('/user/:username', function(req, res) {
             };
 
             // Get comment count
-            client.lrange(redisPrefix + ":" + hnusername + ":comment_count", 0, -1, function(err, data) {
+            client.lrange(config.app.redis.prefix + ":" + hnusername + ":comment_count", 0, -1, function(err, data) {
                 if (!err) {
                     for (var i = data.length - 1; i >= 0; i--) {
                         var temp = data[i].split(":");
@@ -182,7 +181,7 @@ app.get('/user/:username', function(req, res) {
                     };
 
                     // Get submission count
-                    client.lrange(redisPrefix + ":" + hnusername + ":submission_count", 0, -1, function(err, data) {
+                    client.lrange(config.app.redis.prefix + ":" + hnusername + ":submission_count", 0, -1, function(err, data) {
                         if (!err) {
                             for (var i = data.length - 1; i >= 0; i--) {
                                 var temp = data[i].split(":");
@@ -216,19 +215,19 @@ app.get('/user/:username', function(req, res) {
 // Update all the user fields, only keep the last 30 value:timestamp pairs
 function updateKey(body, fieldname, hnusername) {
     var timestamp = moment().unix();
-    var redisKey = redisPrefix + ":" + hnusername + ":" + fieldname;
+    var redisKey = config.app.redis.prefix + ":" + hnusername + ":" + fieldname;
     var redisValue = body[fieldname] + ":" + timestamp;
 
     client.rpush(redisKey, redisValue, function(err, res) {
         if (err) {
-            console.log(err)
+            console.log("Error" + err)
         } else {
             // Make sure we are just keeping a 30 day history
             client.llen(redisKey, function(err, res) {
                 if (res > 30) {
                     client.lpop(redisKey, function(err, res) {
                         if (err) {
-                            console.log(err);
+                            console.log("Error" + err);
                         } else {
                             console.log("Purged from " + redisKey + " -> " + res);
                         }
@@ -257,7 +256,7 @@ function updateUser(hnusername) {
 
 // Update all values every day at midnight
 new cron('0 0 0 * * *', function() {
-    client.smembers(redisPrefix + "-users", function(err, users) {
+    client.smembers(config.app.redis.prefix + "-users", function(err, users) {
         if (!err) {
             for (var i = users.length - 1; i >= 0; i--) {
                 updateUser(users[i]);
