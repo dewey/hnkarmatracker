@@ -42,7 +42,6 @@ app.get('/', function(req, res) {
     res.render('index', {
         title: config.app.title
     });
-    console.log(config.app.title)
 });
 
 // Render the signup page. The exists parameter is used to determine if we should
