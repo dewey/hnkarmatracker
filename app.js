@@ -1,6 +1,6 @@
 /**
  * Hackernews Karma Tracker
- * 
+ *
  * This app is tracking the account stats of users who signed up using Redis to store all the collected values and
  * a cronjob to gather new stats every 24hours.
  * @author dewey [https://github.com/dewey]
@@ -40,15 +40,16 @@ if ('development' == app.get('env')) {
 // Render the index page
 app.get('/', function(req, res) {
     res.render('index', {
-        title: config.title
+        title: config.app.title
     });
+    console.log(config.app.title)
 });
 
 // Render the signup page. The exists parameter is used to determine if we should
 // display the error message (User already in the system) or not.
 app.get('/user/signup', function(req, res) {
     res.render('signup', {
-        title: config.title,
+        title: config.app.title,
         exists: req.query.exists
     });
 });
@@ -100,7 +101,7 @@ app.post('/user/add', function(req, res) {
                     console.log("[HN Tracker] User already exists. Redirecting to user page.")
 
                     // Fetching new stats
-                    updateUser(hnusername)
+                    fetchStats(hnusername)
 
                     // Overwrite URL
                     res.location('/user/' + hnusername);
@@ -113,7 +114,7 @@ app.post('/user/add', function(req, res) {
                     client.sadd(config.app.redis.prefix + "-users", hnusername);
 
                     // Fetching new stats
-                    updateUser(hnusername)
+                    fetchStats(hnusername)
 
                     // Overwrite URL
                     res.location('/user/' + hnusername);
@@ -130,13 +131,12 @@ app.post('/user/add', function(req, res) {
     }
 });
 
-// Debug function to manually refresh the stats. Would mess up the values provided by the
-// daily cronjob.
+// Debug function to manually refresh the stats. Would mess up the values provided by the daily cronjob.
 app.get('/user/:username/refresh', function(req, res) {
     var hnusername = req.params.username;
 
     // Uncomment for debug purposes only
-    // updateUser(hnusername);
+    // fetchStats(hnusername);
 
     // Overwrite URL
     res.location('/user/' + hnusername);
@@ -239,17 +239,48 @@ function updateKey(body, fieldname, hnusername) {
 }
 
 // Update user stats
-// TODO: Use async.series
-function updateUser(hnusername) {
+function fetchStats(hnusername) {
     hn.get("users/" + hnusername, function(err, res, body) {
         if (!err) {
-            // Update counts
-            updateKey(body, "karma", hnusername);
-            updateKey(body, "comment_count", hnusername);
-            updateKey(body, "submission_count", hnusername);
-            updateKey(body, "avg", hnusername);
+
+            // Update all fields
+            async.parallel([
+
+                    function(callback) {
+                        updateKey(function() {
+                            if (err) return callback(err);
+                            callback();
+                        }, body, "karma", hnusername);
+                    },
+                    function(callback) {
+                        updateKey(function() {
+                            if (err) return callback(err);
+                            callback();
+                        }, body, "comment_count", hnusername);
+                    },
+                    function(callback) {
+                        updateKey(function() {
+                            if (err) return callback(err);
+                            callback();
+                        }, body, "submission_count", hnusername);
+                    },
+                    function(callback) {
+                        updateKey(function() {
+                            if (err) return callback(err);
+                            callback();
+                        }, body, "avg", hnusername);
+                    }
+                ],
+                // Callback if everything was successful
+                function(err, results) {
+                    if (err) {
+                        console.log("[Fetching] " + err)
+                    } else {
+                        console.log("All records updated!")
+                    }
+                });
         } else {
-            console.log("[Express] Error fetching new stats.")
+            console.log("[Express] Error fetching new stats from the API.")
         }
     });
 }
@@ -259,13 +290,12 @@ new cron('0 0 0 * * *', function() {
     client.smembers(config.app.redis.prefix + "-users", function(err, users) {
         if (!err) {
             for (var i = users.length - 1; i >= 0; i--) {
-                updateUser(users[i]);
+                fetchStats(users[i]);
                 console.log("Updated stats for user -> " + users[i]);
             };
         } else {
             console.log("[Redis] Error listing all users.")
         }
-
     })
 }, null, true, "America/Los_Angeles");
 
@@ -276,5 +306,5 @@ client.on("error", function(err) {
 
 // Start the app
 http.createServer(app).listen(app.get('port'), function() {
-    console.log('HN Karma Tracker is listening on port ' + app.get('port'));
+    console.log(config.name + ' is listening on port ' + app.get('port'));
 });
