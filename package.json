@@ -21,7 +21,8 @@
         "time": "*",
         "cron": "*",
         "validator": "*",
-        "moment": "*"
+        "moment": "*",
+        "async": "*"
     },
     "repository": {
         "type": "git",
