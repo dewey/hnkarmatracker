@@ -246,7 +246,6 @@ function updateKey(body, fieldname, cb) {
                 return client.lpop(redisKey, function(err, res) {
                     if (err)
                         return cb(err);
-                    console.log("Purged from " + redisKey + " -> " + res);
                     cb();
                 })
             }
@@ -292,7 +291,7 @@ function fetchStats(hnusername) {
 }
 
 // Update all values every day at midnight
-new cron('0 * * * * *', function() {
+new cron('0 0 0 * * *', function() {
     client.smembers(config.app.redis.prefix + "-users", function(err, users) {
         if (!err) {
             for (var i = users.length - 1; i >= 0; i--) {
