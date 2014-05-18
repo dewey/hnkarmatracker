@@ -1,6 +1,34 @@
 # Hackernews Karma Tracker
 This is a simple webapp to track your Hackernews karma, comment count and submission count. It's written in NodeJS and using Redis to store all the collected values. There's a cronjob running every 24h to collect new stats for all registrated users. All the stats are collected using the [Algolia API](https://hn.algolia.com/api/).
 
+# Data
+
+#### Usernames:
+
+All the usernames are stored in a set called `<redis-prefix>-users`. The prefix is set in the config file's app section:
+
+    "app": {
+        "title": "HN Karma Tracker",
+        "redis": {
+            "prefix": "hntracker"
+        }
+    }
+
+Listing all users currently signed up: `smembers hntracker-users`
+
+#### Stats:
+
+The collected stats as listed on the HN profile (karma, submission count, comment count and avg) are stored in lists:
+
+    <redis-prefix>:hnusername:karma
+    <redis-prefix>:hnusername:submission_count
+    <redis-prefix>:hnusername:comment_count
+    <redis-prefix>:hnusername:avg
+    
+To show all list items:
+
+`lrange <redis-prefix>:username:<fieldname> 0 -1`
+    
 # Licence
 The MIT License (MIT)
 
