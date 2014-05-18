@@ -92,41 +92,58 @@ app.post('/user/add', function(req, res) {
     var timestamp = moment().unix();
 
     if (validator.isAlphanumeric(hnusername) && hnusername.length > 1 && hnusername.length < 50) {
-
-        // Check if user is already in the database
-        client.exists(config.app.redis.prefix + "-" + hnusername, function(err, reply) {
+        hn.get("users/" + hnusername, function(err, response, body) {
             if (!err) {
-                if (reply == 1) {
-                    console.log("[HN Tracker] User already exists. Redirecting to user page.")
+                // Check if user is already in the database
+                client.exists(config.app.redis.prefix + "-" + hnusername, function(err, reply) {
+                    if (!err) {
+                        if (reply == 1) {
+                            console.log("[HN Tracker] User already exists. Redirecting to user page.")
 
-                    // Fetching new stats
-                    fetchStats(hnusername)
+                            // Fetching new stats
+                            fetchStats(hnusername)
 
-                    // Overwrite URL
-                    res.location('/user/' + hnusername);
+                            // Overwrite URL
+                            res.location('/user/' + hnusername);
 
-                    // And forward to success page
-                    res.redirect('/user/' + hnusername);
-                } else {
-                    console.log("[HN Tracker] Adding new user")
-                    client.hmset(config.app.redis.prefix + "-" + hnusername, "created", timestamp);
-                    client.sadd(config.app.redis.prefix + "-users", hnusername);
+                            // And forward to success page
+                            res.redirect('/user/' + hnusername);
+                        } else {
+                            console.log("[HN Tracker] Adding new user")
+                            client.hmset(config.app.redis.prefix + "-" + hnusername, "created", timestamp);
+                            client.sadd(config.app.redis.prefix + "-users", hnusername);
 
-                    // Fetching new stats
-                    fetchStats(hnusername)
+                            // Fetching new stats
+                            fetchStats(hnusername)
 
-                    // Overwrite URL
-                    res.location('/user/' + hnusername);
+                            // Overwrite URL
+                            res.location('/user/' + hnusername);
 
-                    // And forward to success page
-                    res.redirect('/user/' + hnusername);
-                }
+                            // And forward to success page
+                            res.redirect('/user/' + hnusername);
+                        }
+                    } else {
+                        console.log("[Redis] " + err)
+                    }
+                });
             } else {
-                console.log("[Redis] " + err)
+                console.log("[HN Tracker] Error: Not a valid username.");
+
+                // Overwrite URL
+                res.location('/user/signup');
+
+                // And forward to success page
+                res.redirect('/user/signup');
             }
         });
     } else {
-        console.log("[HN Tracker] Error: Not a valid username.")
+        // Overwrite URL
+        res.location('/user/signup');
+
+        // And forward to success page
+        res.redirect('/user/signup');
+
+        console.log("[HN Tracker] Error: Not a valid username.");
     }
 });
 
@@ -279,13 +296,14 @@ function fetchStats(hnusername) {
                     }
                 });
         } else {
-            console.log("[Express] Error fetching new stats from the API.")
+            console.log(err);
+            console.log("[Express] Error fetching new stats for " + hnusername + " from the API.")
         }
     });
 }
 
 // Update all values every day at midnight
-new cron('0 0 0 * * *', function() {
+new cron('0 * * * * *', function() {
     client.smembers(config.app.redis.prefix + "-users", function(err, users) {
         if (!err) {
             for (var i = users.length - 1; i >= 0; i--) {
