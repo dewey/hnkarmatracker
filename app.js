@@ -229,32 +229,34 @@ app.get('/user/:username', function(req, res) {
 
 
 // Update all the user fields, only keep the last 30 value:timestamp pairs
-function updateKey(body, fieldname, hnusername) {
+function updateKey(body, fieldname, cb) {
     var timestamp = moment().unix();
-    var redisKey = config.app.redis.prefix + ":" + hnusername + ":" + fieldname;
+    var redisKey = config.app.redis.prefix + ":" + body['username'] + ":" + fieldname;
     var redisValue = body[fieldname] + ":" + timestamp;
 
     client.rpush(redisKey, redisValue, function(err, res) {
         if (err) {
-            console.log("Error" + err)
-        } else {
-            // Make sure we are just keeping a 30 day history
-            client.llen(redisKey, function(err, res) {
-                if (res > 30) {
-                    client.lpop(redisKey, function(err, res) {
-                        if (err) {
-                            console.log("Error" + err);
-                        } else {
-                            console.log("Purged from " + redisKey + " -> " + res);
-                        }
-                    })
-                }
-            });
+            return cb(err);
         }
+        // Make sure we are just keeping a 30 day history
+        client.llen(redisKey, function(err, res) {
+            if (err)
+                return cb(err);
+            if (res > 30) {
+                return client.lpop(redisKey, function(err, res) {
+                    if (err)
+                        return cb(err);
+                    console.log("Purged from " + redisKey + " -> " + res);
+                    cb();
+                })
+            }
+            cb();
+        });
     });
 }
 
-// Update user stats
+// This function updates the various redis keys (karma, comment_count, submission_count, avg)
+// if the lookup in the API is successful.
 function fetchStats(hnusername) {
     hn.get("users/" + hnusername, function(err, res, body) {
         if (!err) {
@@ -263,28 +265,16 @@ function fetchStats(hnusername) {
             async.parallel([
 
                     function(callback) {
-                        updateKey(function() {
-                            if (err) return callback(err);
-                            callback();
-                        }, body, "karma", hnusername);
+                        updateKey(body, "karma", callback);
                     },
                     function(callback) {
-                        updateKey(function() {
-                            if (err) return callback(err);
-                            callback();
-                        }, body, "comment_count", hnusername);
+                        updateKey(body, "comment_count", callback);
                     },
                     function(callback) {
-                        updateKey(function() {
-                            if (err) return callback(err);
-                            callback();
-                        }, body, "submission_count", hnusername);
+                        updateKey(body, "submission_count", callback);
                     },
                     function(callback) {
-                        updateKey(function() {
-                            if (err) return callback(err);
-                            callback();
-                        }, body, "avg", hnusername);
+                        updateKey(body, "avg", callback);
                     }
                 ],
                 // Callback if everything was successful
@@ -292,12 +282,11 @@ function fetchStats(hnusername) {
                     if (err) {
                         console.log("[Fetching] " + err)
                     } else {
-                        console.log("All records updated!")
+                        console.log("[Fetching] " + moment().format("MM-DD-YYYY HH:MM:SS") + " Updated stats for " + hnusername)
                     }
                 });
         } else {
-            console.log(err);
-            console.log("[Express] Error fetching new stats for " + hnusername + " from the API.")
+            console.log("[Fetching] Error fetching new stats for " + hnusername + " from the API.")
         }
     });
 }
@@ -308,7 +297,6 @@ new cron('0 * * * * *', function() {
         if (!err) {
             for (var i = users.length - 1; i >= 0; i--) {
                 fetchStats(users[i]);
-                console.log("Updated stats for user -> " + users[i]);
             };
         } else {
             console.log("[Redis] Error listing all users.")
