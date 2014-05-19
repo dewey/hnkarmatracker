@@ -212,12 +212,12 @@ app.get('/user/:username', function(req, res) {
                             title: "HN Karma Tracker",
                             username: hnusername,
                             data: {
-                                labelsKarma: dataLabelsKarmaQuery,
-                                dataKarma: dataKarmaQuery,
-                                labelsComment: dataLabelsCommentQuery,
-                                dataComment: dataCommentQuery,
-                                labelsSubmission: dataLabelsSubmissionQuery,
-                                dataSubmission: dataSubmissionQuery
+                                labelsKarma: dataLabelsKarmaQuery.reverse(),
+                                dataKarma: dataKarmaQuery.reverse(),
+                                labelsComment: dataLabelsCommentQuery.reverse(),
+                                dataComment: dataCommentQuery.reverse(),
+                                labelsSubmission: dataLabelsSubmissionQuery.reverse(),
+                                dataSubmission: dataSubmissionQuery.reverse()
                             }
                         });
                     })
