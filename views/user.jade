@@ -21,6 +21,9 @@ block content
       h5 Submissions last 30 days
       canvas#canvas-submission(width="1000px", height="400")
 
+      h5 Submissions and Comments last 30 days
+      canvas#canvas-submissioncomment(width="1000px", height="400")
+
   script(type='text/javascript').
     var lineChartDataKarma = {
             labels : [#{data.labelsKarma}],
@@ -31,31 +34,17 @@ block content
                     pointColor : "rgba(220,220,220,1)",
                     pointStrokeColor : "#fff",
                     data : [#{data.dataKarma}]
-                },
-                {
-                    fillColor : "rgba(62, 191, 190, 1.0000)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    data : [#{data.dataComment}]
-                }, 
-                {
-                    fillColor : "rgba(247, 70, 74, 1.0000)",
-                    strokeColor : "rgba(220,220,220,1)",
-                    pointColor : "rgba(220,220,220,1)",
-                    pointStrokeColor : "#fff",
-                    data : [#{data.dataSubmission}]
                 }
             ] 
         }
 
-    var myKarmaCommentSubmission = new Chart(document.getElementById("canvas-karma").getContext("2d")).Line(lineChartDataKarma);
+    var myKarma = new Chart(document.getElementById("canvas-karma").getContext("2d")).Line(lineChartDataKarma);
 
     var lineChartDataComments = {
             labels : [#{data.labelsComment}],
             datasets : [
                 {
-                    fillColor : "rgba(220,220,220,0.5)",
+                    fillColor : "rgba(62, 191, 190, 1.0000)",
                     strokeColor : "rgba(220,220,220,1)",
                     pointColor : "rgba(220,220,220,1)",
                     pointStrokeColor : "#fff",
@@ -70,7 +59,7 @@ block content
             labels : [#{data.labelsSubmission}],
             datasets : [
                 {
-                    fillColor : "rgba(220,220,220,0.5)",
+                    fillColor : "rgba(247, 70, 74, 1.0000)",
                     strokeColor : "rgba(220,220,220,1)",
                     pointColor : "rgba(220,220,220,1)",
                     pointStrokeColor : "#fff",
@@ -80,5 +69,27 @@ block content
         }
 
     var mySubmission = new Chart(document.getElementById("canvas-submission").getContext("2d")).Line(lineChartDataSubmission);
+
+    var lineChartDataSubmissionComment = {
+        labels : [#{data.labelsSubmission}],
+        datasets : [
+            {
+                fillColor : "rgba(62, 191, 190, 1.0000)",
+                strokeColor : "rgba(151,187,205,1)",
+                pointColor : "rgba(151,187,205,1)",
+                pointStrokeColor : "#fff",
+                data : [#{data.dataComment}]
+            }, 
+            {
+                fillColor : "rgba(247, 70, 74, 1.0000)",
+                strokeColor : "rgba(220,220,220,1)",
+                pointColor : "rgba(220,220,220,1)",
+                pointStrokeColor : "#fff",
+                data : [#{data.dataSubmission}]
+            }
+        ] 
+    }
+
+    var mySubmissionComment = new Chart(document.getElementById("canvas-submissioncomment").getContext("2d")).Line(lineChartDataSubmissionComment);
     
   
