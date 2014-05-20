@@ -15,6 +15,9 @@ block content
     div.row
         form(action="/user/add", method="post", role="form")
             div.col-md-3
-                input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername")
+                if user
+                    input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername", value=user)
+                else
+                    input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername")
             div.col-md-3
                 button(class="btn btn-block btn-lg btn-primary", type="submit") Track my account

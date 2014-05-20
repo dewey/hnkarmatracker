@@ -49,7 +49,8 @@ app.get('/', function(req, res) {
 app.get('/user/signup', function(req, res) {
     res.render('signup', {
         title: config.app.title,
-        exists: req.query.exists
+        exists: req.query.exists,
+        user: req.query.user
     });
 });
 
@@ -73,7 +74,7 @@ app.post('/user/show', function(req, res) {
                 res.location('/user/signup');
 
                 // And forward to success page
-                res.redirect('/user/signup?exists=no');
+                res.redirect('/user/signup?exists=no&user=' + hnusername);
             }
         });
     } else {
@@ -183,7 +184,7 @@ app.get('/user/:username', function(req, res) {
                 var temp = data[i].split(":");
 
                 dataKarmaQuery.push(temp[0]);
-                dataLabelsKarmaQuery.push(moment.unix(temp[1]).format("MM"));
+                dataLabelsKarmaQuery.push(moment.unix(temp[1]).format("DD.MM"));
             };
 
             // Get comment count
@@ -193,7 +194,7 @@ app.get('/user/:username', function(req, res) {
                         var temp = data[i].split(":");
 
                         dataCommentQuery.push(temp[0]);
-                        dataLabelsCommentQuery.push(moment.unix(temp[1]).format("MM"));
+                        dataLabelsCommentQuery.push(moment.unix(temp[1]).format("DD.MM"));
                     };
 
                     // Get submission count
@@ -203,7 +204,7 @@ app.get('/user/:username', function(req, res) {
                                 var temp = data[i].split(":");
 
                                 dataSubmissionQuery.push(temp[0]);
-                                dataLabelsSubmissionQuery.push(moment.unix(temp[1]).format("MM"));
+                                dataLabelsSubmissionQuery.push(moment.unix(temp[1]).format("DD.MM"));
                             };
                         }
 
