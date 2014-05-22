@@ -192,7 +192,7 @@ app.get('/user/:username', function(req, res) {
                 var temp = data[i].split(":");
 
                 dataKarmaQuery.push(temp[0]);
-                dataLabelsKarmaQuery.push(moment.unix(temp[1]).format("DD.MM"));
+                dataLabelsKarmaQuery.push(moment.unix(temp[1]).format("DD"));
             };
 
             // Get comment count
@@ -202,7 +202,7 @@ app.get('/user/:username', function(req, res) {
                         var temp = data[i].split(":");
 
                         dataCommentQuery.push(temp[0]);
-                        dataLabelsCommentQuery.push(moment.unix(temp[1]).format("DD.MM"));
+                        dataLabelsCommentQuery.push(moment.unix(temp[1]).format("DD"));
                     };
 
                     // Get submission count
@@ -212,7 +212,7 @@ app.get('/user/:username', function(req, res) {
                                 var temp = data[i].split(":");
 
                                 dataSubmissionQuery.push(temp[0]);
-                                dataLabelsSubmissionQuery.push(moment.unix(temp[1]).format("DD.MM"));
+                                dataLabelsSubmissionQuery.push(moment.unix(temp[1]).format("DD"));
                             };
                         }
 
