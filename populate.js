@@ -81,7 +81,7 @@ function purgeOldDatapoint(redisKey, cb) {
 
 // This cronjob will add the current number of tracked users and a timestamp to a list called <redisprefix>-users-stats. This
 // will allow us to have a simple growth chart.
-new cron('* * * * * *', function() {
+new cron('0 0 0 * * *', function() {
     var now = moment().unix();
     async.series([
 
