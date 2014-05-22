@@ -54,6 +54,11 @@ body {
     vertical-align: middle;
     font-size: 70px;
 }
+.entypo.gauge:before {
+    content: '\1F6C7';
+    vertical-align: middle;
+    font-size: 70px;
+}
 .row-space-top {
     margin-top: 10%;
     margin-bottom: 30px;
@@ -67,4 +72,7 @@ body {
     line-height: 1.46428571;
     font-weight: 300;
     vertical-align: middle;
+}
+span.currentusers {
+    font-weight: bold;
 }

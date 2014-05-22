@@ -39,8 +39,16 @@ if ('development' == app.get('env')) {
 
 // Render the index page
 app.get('/', function(req, res) {
-    res.render('index', {
-        title: config.app.title
+
+    client.scard(config.app.redis.prefix + "-users", function(err, reply) {
+        if (err) {
+            console.log("[Redis] Error while counting tracked users.")
+        } else {
+            res.render('index', {
+                title: config.app.title,
+                numberOfTrackedUsers: reply
+            });
+        };
     });
 });
 
