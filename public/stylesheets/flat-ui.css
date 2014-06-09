@@ -205,17 +205,16 @@ body {
     font-family: "Lato", Helvetica, Arial, sans-serif;
     font-size: 18px;
     line-height: 1.72222;
-    color: #34495e;
-    background-color: #ffffff;
+    color: #ffffff;
 }
 a {
-    color: #16a085;
+    color: #fc6621;
     text-decoration: none;
     -webkit-transition: 0.25s;
     transition: 0.25s;
 }
 a:hover, a:focus {
-    color: #1abc9c;
+    color: #df4719;
     text-decoration: none;
 }
 a:focus {
@@ -586,15 +585,14 @@ fieldset[disabled] .btn-default,
 }
 .btn-primary {
     color: #ffffff;
-    background-color: #1abc9c;
+    background-color: #fc6621
 }
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
     color: #ffffff;
-    background-color: #48c9b0;
-    border-color: #48c9b0;
+    background-color: #f24d1b;
 }
 .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
-    background: #16a085;
+    background: #f24d1b;
     border-color: #16a085;
 }
 .btn-primary.disabled,
@@ -4107,7 +4105,6 @@ body.vjs-full-window {
    }
 }
 footer {
-    background-color: #edeff1;
     color: #bac1c8;
     font-size: 15px;
     padding: 0;
