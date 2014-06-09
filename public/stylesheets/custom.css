@@ -100,3 +100,7 @@ html {
 #tooltip-error {
     border-bottom-color: #fc6621;
 }
+
+#canvas-submissioncomment {
+    margin-bottom: 50px;
+}
