@@ -79,4 +79,15 @@ span.currentusers {
 
 #about {
     font-size: 12px;
+}}
+
+.message-error .tooltip-inner {
+    width: 261px;
+    background-color: #fc6621;
+    max-width: 400px;
 }
+
+#tooltip-error {
+    border-bottom-color: #fc6621;
+}
+

@@ -3,13 +3,7 @@ extends layout
 block content
     div.row
         div.col-md-12
-            if exists == "no"
-                p.lead
-                    span.color-error
-                        | I'm not tracking this account name yet. 
-                    | Enter your HN username and the system will start tracking your account.
-            else
-                p.lead Enter your HN username and the system will start tracking your account.
+            p.lead Enter your HN username and the system will start tracking your account.
             
 
     div.row
@@ -17,7 +11,13 @@ block content
             div.col-md-3
                 if user
                     input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername", value=user)
+                    if exists == "no"
+                        div(class="tooltip fade bottom in message-error", style="display: block;")
+                            div(class="tooltip-arrow", id="tooltip-error")
+                            div(class="tooltip-inner")
+                                | Not tracked yet!
                 else
                     input(type="text", class="form-control", id="inputUsername", placeholder="Enter HN Username", name="hnusername")
+
             div.col-md-3
                 button(class="btn btn-block btn-lg btn-primary", type="submit") Track my account
