@@ -9,19 +9,21 @@
 }
 .color-error {
     color: rgba(247, 70, 74, 1.0000);
+    font-weight: 400;
 }
 #wrap {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -90px;
+    margin: 0 auto -50px;
 }
 #push,
-#footer {
-    height: 100px;
+#about {
+    height: 50px;
 }
-#footer {
-    background-color: #f5f5f5;
+#about a {
+    font-weight: inherit;
+    color: #ffffff;
 }
 body {
     height: 100%;
@@ -75,4 +77,30 @@ body {
 }
 span.currentusers {
     font-weight: bold;
+}
+
+html { 
+  background: url(/images/bg.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+#about {
+    font-size: 12px;
+}
+
+.message-error .tooltip-inner {
+    width: 261px;
+    background-color: #fc6621;
+    max-width: 400px;
+}
+
+#tooltip-error {
+    border-bottom-color: #fc6621;
+}
+
+#canvas-submissioncomment {
+    margin-bottom: 50px;
 }

@@ -1,6 +1,7 @@
 html
   head
     title= title
+    block head
     link(rel='stylesheet', href='/stylesheets/custom.css')
     link(rel='stylesheet', href='/stylesheets/bootstrap.css')
     link(rel='stylesheet', href='/stylesheets/flat-ui.css')
@@ -29,24 +30,24 @@ html
                         h2= title
             block content
         div#push
-    footer
+    footer#about
         div.container
             div.row
                 div.col-xs-12
-                    h5 About
-                    p This is a weekend project by 
-                        a(href="https://news.ycombinator.com/user?id=dewey") dewey
-                        | . I'm also on 
-                        a(href="https://github.com/dewey") Github 
-                        | and 
-                        a(href="https://twitter.com/tehwey") Twitter
-                        | . Built with 
-                        a(href="") ExpressJS
-                        | , 
-                        a(href="https://twitter.com/tehwey") Redis 
-                        | and 
-                        a(href="http://designmodo.github.io/Flat-UI/") Flat-UI
-                        |  in Austria. 
-                        | Favicon by 
-                        a(href="http://thenounproject.com/term/graph/17643/") Erin Standley 
-                        | from The Noun Project.
+                    | This is a weekend project by 
+                    a(href="https://news.ycombinator.com/user?id=dewey") dewey
+                    | .
+                    | I'm also on 
+                    a(href="https://github.com/dewey") Github 
+                    | and 
+                    a(href="https://twitter.com/tehwey") Twitter
+                    | . 
+                    | Favicon by 
+                    a(href="http://thenounproject.com/term/graph/17643/") Erin Standley 
+                    | from The Noun Project.
+                    | Background image from 
+                    a(href="http://unsplash.com/") unsplash.com 
+                    | . 
+                    | Data provided by 
+                    a(href="http://hn.algolia.com/about") Algolia
+                    | .
