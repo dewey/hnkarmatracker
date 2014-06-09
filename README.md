@@ -38,7 +38,7 @@ Remove the tracking JS from `layout.jade` and `public/javascripts/gauges.js`
 - Profile link to current nick for typed.js, currently hardcoded to `/user/dewey`
 - Untrack form
 - Hide empty graphs
-- Disclaimer that data is only updated if it's updated on Algolia
+- Implement better way to scrape profiles instead of Algolias API (https://news.ycombinator.com/item?id=7860385)
     
 # Licence
 The MIT License (MIT)
