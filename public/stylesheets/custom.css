@@ -14,14 +14,15 @@
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -90px;
+    margin: 0 auto -50px;
 }
 #push,
-#footer {
-    height: 100px;
+#about {
+    height: 50px;
 }
-#footer {
-    background-color: #f5f5f5;
+#about a {
+    font-weight: inherit;
+    color: #ffffff;
 }
 body {
     height: 100%;
