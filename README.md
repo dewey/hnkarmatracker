@@ -1,3 +1,5 @@
+![alt tag](https://github.com/dewey/hnkarmatracker/tree/master/public/images/readme.jpg)
+
 # Hackernews Karma Tracker
 This is a simple webapp to track your Hackernews karma, comment count and submission count. It's written in NodeJS and using Redis to store all the collected values. There's a cronjob running every 24h to collect new stats for all registrated users. All the stats are collected using the [Algolia API](https://hn.algolia.com/api/).
 
