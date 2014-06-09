@@ -9,6 +9,7 @@
 }
 .color-error {
     color: rgba(247, 70, 74, 1.0000);
+    font-weight: 400;
 }
 #wrap {
     min-height: 100%;
@@ -76,10 +77,19 @@ body {
 }
 span.currentusers {
     font-weight: bold;
+}
+
+html { 
+  background: url(/images/bg.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 
 #about {
     font-size: 12px;
-}}
+}
 
 .message-error .tooltip-inner {
     width: 261px;
@@ -90,4 +100,3 @@ span.currentusers {
 #tooltip-error {
     border-bottom-color: #fc6621;
 }
-
