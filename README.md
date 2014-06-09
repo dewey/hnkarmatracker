@@ -28,6 +28,10 @@ The collected stats as listed on the HN profile (karma, submission count, commen
 To show all list items:
 
 `lrange <redis-prefix>:username:<fieldname> 0 -1`
+
+# Usage
+
+Remove the tracking JS from `layout.jade` and `public/javascripts/gauges.js`
     
 # Licence
 The MIT License (MIT)
