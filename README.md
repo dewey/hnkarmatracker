@@ -32,6 +32,13 @@ To show all list items:
 # Usage
 
 Remove the tracking JS from `layout.jade` and `public/javascripts/gauges.js`
+
+# TODO
+
+- Profile link to current nick for typed.js, currently hardcoded to `/user/dewey`
+- Untrack form
+- Hide empty graphs
+- Disclaimer that data is only updated if it's updated on Algolia
     
 # Licence
 The MIT License (MIT)

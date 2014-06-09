@@ -1,14 +1,24 @@
 extends layout
 
 block content
+    script(type='text/javascript').
+        $(function(){
+            $(".nick").typed({
+                strings: ["tptacek", "patio11", "jacquesm", "dewey"],
+                typeSpeed: 200,
+                backDelay: 500
+            });
+        });
+
     p.lead
         | This site will track your 
         a(href="https://news.ycombinator.com/") Hackernews 
         | account stats and draws pretty graphs once you  
         a(href="/user/signup") signed up
-        | . If you just want to know how it looks like check out my 
-        a(href="/user/dewey") profile
-        | .
+        | . If you just want to know how it looks like check out  
+        a(href="/user/dewey")
+            span.nick
+        | 's profile.
 
     div.row
         form(action="/user/show", method="post", role="form")
