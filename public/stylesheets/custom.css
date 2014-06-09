@@ -76,4 +76,7 @@ body {
 }
 span.currentusers {
     font-weight: bold;
+
+#about {
+    font-size: 12px;
 }
