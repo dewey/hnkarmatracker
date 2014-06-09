@@ -1,5 +1,8 @@
 extends layout
 
+block prepend head
+    link(rel='stylesheet', href='/stylesheets/custom-dark.css')
+
 block content
   div.row
     div.col-md-12
@@ -38,7 +41,7 @@ block content
             ] 
         }
 
-    var myKarma = new Chart(document.getElementById("canvas-karma").getContext("2d")).Line(lineChartDataKarma, { scaleFontColor : "rgba(255, 255, 255, 1.0000)", scaleGridLineColor : "rgba(77, 77, 77, 1.0000)", scaleGridLineWidth : 0.5 } );
+    var myKarma = new Chart(document.getElementById("canvas-karma").getContext("2d")).Line(lineChartDataKarma, { scaleFontColor : "rgba(255, 255, 255, 1.0000)", scaleGridLineColor : "rgba(149, 149, 149, 1.0000)", scaleGridLineWidth : 0.5 } );
 
     var lineChartDataComments = {
             labels : [#{data.labelsComment}],
@@ -53,7 +56,7 @@ block content
             ] 
         }
 
-    var myComment = new Chart(document.getElementById("canvas-comment").getContext("2d")).Line(lineChartDataComments, { scaleFontColor : "rgba(255, 255, 255, 1.0000)" } );
+    var myComment = new Chart(document.getElementById("canvas-comment").getContext("2d")).Line(lineChartDataComments, { scaleFontColor : "rgba(255, 255, 255, 1.0000)" , scaleGridLineColor : "rgba(149, 149, 149, 1.0000)", scaleGridLineWidth : 0.5 } );
 
     var lineChartDataSubmission = {
             labels : [#{data.labelsSubmission}],
@@ -68,7 +71,7 @@ block content
             ] 
         }
 
-    var mySubmission = new Chart(document.getElementById("canvas-submission").getContext("2d")).Line(lineChartDataSubmission, { scaleFontColor : "rgba(255, 255, 255, 1.0000)" } );
+    var mySubmission = new Chart(document.getElementById("canvas-submission").getContext("2d")).Line(lineChartDataSubmission, { scaleFontColor : "rgba(255, 255, 255, 1.0000)" , scaleGridLineColor : "rgba(149, 149, 149, 1.0000)", scaleGridLineWidth : 0.5 } );
 
     var lineChartDataSubmissionComment = {
         labels : [#{data.labelsSubmission}],
@@ -90,6 +93,6 @@ block content
         ] 
     }
 
-    var mySubmissionComment = new Chart(document.getElementById("canvas-submissioncomment").getContext("2d")).Line(lineChartDataSubmissionComment, { scaleFontColor : "rgba(255, 255, 255, 1.0000)" } );
+    var mySubmissionComment = new Chart(document.getElementById("canvas-submissioncomment").getContext("2d")).Line(lineChartDataSubmissionComment, { scaleFontColor : "rgba(255, 255, 255, 1.0000)" , scaleGridLineColor : "rgba(149, 149, 149, 1.0000)", scaleGridLineWidth : 0.5 } );
     
   
